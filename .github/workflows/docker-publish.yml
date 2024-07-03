@@ -89,30 +89,13 @@ jobs:
            terraform_version: 1.8.0 # Change to your preferred version
 
       - name: Terraform Init
-        run: cd infra/ && pwd && ls
-
-      - name: Terraform Init
-        run: terraform init -reconfigure
+        run: |
+          cd infra/
+          terraform init -reconfigure
   
       - name: Terraform Plan
-        run: terraform plan
-
-      - name: Terraform Apply
-        if: github.event.inputs.destroy == 'false'
-        run: terraform apply -auto-approve
-
-      - name: Terraform Destroy
-        if: github.event.inputs.destroy == 'true'
-        run: terraform destroy -auto-approve
-
-      - name: Generate kubeconfig
         run: |
-          {
-              echo 'EKS_CREDS<<EOF'
-              aws eks update-kubeconfig --region ap-south-1 --name ankit-cluster
-              echo EOF
-          } >> $GITHUB_ENV
-      - uses: tale/kubectl-action@v1
-        with:
-          base64-kube-config: ${{ env.EKS_CREDS }}
-      - run: kubectl apply -f deploymentservice.yaml
+          cd infra/
+          terraform plan
+
+      
