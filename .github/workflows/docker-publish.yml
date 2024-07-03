@@ -89,7 +89,7 @@ jobs:
            terraform_version: 1.8.0 # Change to your preferred version
 
       - name: Terraform Init
-        run: cd infra/ && pwd
+        run: cd infra/ && pwd && ls
 
       - name: Terraform Init
         run: terraform init -reconfigure
