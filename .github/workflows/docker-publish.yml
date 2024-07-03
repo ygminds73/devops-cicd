@@ -98,4 +98,26 @@ jobs:
           cd infra/
           terraform plan
 
-      
+      - name: Terraform Apply
+        if: github.event.inputs.destroy == 'false' || github.event.inputs.destroy == null
+        run: |
+          cd infra/
+          terraform apply -auto-approve
+
+      - name: Terraform Destroy
+        if: github.event.inputs.destroy == 'true'
+        run: |
+          cd infra/
+          terraform destroy -auto-approve
+
+      - name: Generate kubeconfig
+        run: |
+          {
+              echo 'EKS_CREDS<<EOF'
+              aws eks update-kubeconfig --region ap-south-1 --name ankit-cluster
+              echo EOF
+          } >> $GITHUB_ENV
+      - uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ env.EKS_CREDS }}
+      - run: kubectl apply -f deploymentservice.yaml
