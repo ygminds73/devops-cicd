@@ -116,6 +116,11 @@ jobs:
         run: |
           cd infra/
           terraform destroy -auto-approve
+      
+      - name: Install AWS CLI
+        uses: aws-actions/aws-cli@v2
+        with:
+          version: 2
 
       - name: Generate kubeconfig
         run: |
