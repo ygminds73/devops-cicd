@@ -86,7 +86,11 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-           terraform_version: 1.0.0  # Change to your preferred version
+           terraform_version: 1.8.0 # Change to your preferred version
+
+      - name: Terraform Init
+        run: cd infra/
+
       - name: Terraform Init
         run: terraform init
   
