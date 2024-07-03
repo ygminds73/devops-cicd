@@ -89,17 +89,17 @@ jobs:
            terraform_version: 1.8.0 # Change to your preferred version
 
       - name: Terraform Init
-        run: cd infra/
+        run: cd infra/ && pwd
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -reconfigure
   
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan
 
       - name: Terraform Apply
         if: github.event.inputs.destroy == 'false'
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -auto-approve
 
       - name: Terraform Destroy
         if: github.event.inputs.destroy == 'true'

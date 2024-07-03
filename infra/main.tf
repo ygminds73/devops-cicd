@@ -1,8 +1,17 @@
-data "aws_subnets" "available-subnets"{
-    filter {
-        name = "tag:Name"
-        values = ["Our-Public-*"]
-    }
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_subnets" "available-subnets" {
+  filter {
+    name = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+
+  filter {
+    name   = "default-for-az"
+    values = ["true"]
+  }
 }
 
 resource "aws_eks_cluster" "ankit-cluster" {
